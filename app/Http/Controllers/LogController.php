@@ -11,4 +11,10 @@ class LogController extends Controller
     public function store(LogRequest $request) {
         LogLine::create($request->all());
     }
+    
+    public function index() {
+        $logLines = LogLine::all();
+
+        return view('log.index', compact('logLines'));
+    }
 }
