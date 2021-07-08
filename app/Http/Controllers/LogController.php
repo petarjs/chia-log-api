@@ -15,6 +15,6 @@ class LogController extends Controller
     public function index() {
         $logLines = LogLine::all();
 
-        return view('log.index', compact('logLines'));
+        return view('logs.index', compact('logLines'));
     }
 }
