@@ -62,5 +62,8 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'fw-only-whitelisted' => \PragmaRX\Firewall\Middleware\FirewallWhitelist::class,
+        'fw-block-blacklisted' => \PragmaRX\Firewall\Middleware\FirewallBlacklist::class,
+        'fw-block-attacks' => \PragmaRX\Firewall\Middleware\BlockAttacks::class,
     ];
 }
