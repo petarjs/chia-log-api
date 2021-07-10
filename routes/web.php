@@ -14,4 +14,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/logs', [LogController::class, 'index']);
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+    
+    Route::get('/logs', [LogController::class, 'index'])->name('logs');
+});
+
+require __DIR__.'/auth.php';
