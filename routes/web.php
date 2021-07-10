@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\PlotController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,11 +20,11 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [LogController::class, 'dash'])->name('dashboard');
     
     Route::get('/logs', [LogController::class, 'index'])->name('logs');
+    Route::get('/plots', [PlotController::class, 'index'])->name('plots');
+    Route::get('/plots/{id}', [PlotController::class, 'details'])->name('plotDetails');
 });
 
 require __DIR__.'/auth.php';

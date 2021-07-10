@@ -6,6 +6,7 @@ use App\Http\Requests\LogRequest;
 use App\Models\LogLine;
 use App\Models\Plot;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LogController extends Controller
 {
@@ -49,5 +50,30 @@ class LogController extends Controller
         $logLines = LogLine::all();
 
         return view('logs.index', compact('logLines'));
+    }
+        
+    public function dash() {
+        $plots = LogLine::where('line', 'LIKE', '%Total plot creation time was%')->get();
+        $totalTimes = $plots->map(function($line) {
+            if (preg_match('/Total plot creation time was (.*) sec/m', $line, $match)) {
+                $time = $match[1];
+                return floatval($time);
+            }
+        });
+        $avgTime = collect($totalTimes)->average();
+
+        $plotCounts = LogLine::where('line', 'like', '%Total plot creation time was%')
+                            ->groupBy('date')
+                            ->orderBy('date', 'DESC')
+                            ->get([
+                                DB::raw('Date(created_at) as date'),
+                                DB::raw('COUNT(*) as "num_plots"')
+                            ]);
+
+        return view('dashboard', [
+            'avgTotalTime' => $avgTime,
+            'avgTotalTimeMin' => $avgTime / 60,
+            'plotCounts' => $plotCounts,
+        ]);
     }
 }
