@@ -10,4 +10,8 @@ class LogLine extends Model
     use HasFactory;
 
     protected $fillable = ['line'];
+
+    public function plot() {
+        return $this->belongsTo(Plot::class);
+    }
 }
