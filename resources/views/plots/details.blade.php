@@ -11,12 +11,25 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     {{$plot->name}}
                 </div>
-                <div class="p-6 bg-white border-b border-gray-200">
-                    @foreach($plot->logLines as $log)
-                        <div>{{$log->line}}</div>
-                    @endforeach
+
+                <div class="js-log-container p-6 bg-black border-b border-gray-200 font-mono text-white" style="max-height: 580px; overflow: scroll">
+                    <table>
+                        @foreach($plot->logLines as $log)
+                            <tr>
+                                <td style="vertical-align: top; min-width: 200px">{{$log->created_at}}</td>
+                                <td class="text-green-600">{{$log->line}}</td>
+                            </tr>
+                        @endforeach
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const $logContainer = document.querySelector('.js-log-container');
+        $logContainer.scrollTop = $logContainer.scrollHeight;
+    })
+</script>
