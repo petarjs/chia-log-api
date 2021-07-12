@@ -47,11 +47,11 @@ class LogController extends Controller
     }
     
     public function index() {
-        $logLines = LogLine::latest()->take(100)->get();
+        $logLines = LogLine::orderBy('created_at', 'desc')->take(100)->get();
 
         return view('logs.index', compact('logLines'));
     }
-        
+
     public function dash() {
         $plots = LogLine::where('line', 'LIKE', '%Total plot creation time was%')->get();
         $totalTimes = $plots->map(function($line) {
