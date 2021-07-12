@@ -11,9 +11,7 @@ use Illuminate\Support\Facades\DB;
 class LogController extends Controller
 {
     public function store(LogRequest $request) {
-        \Log::debug($request->all());
         $log = LogLine::create($request->all());
-        \Log::debug(compact('log'));
 
         if (str_contains($log->line, 'Plot Name:')) {
             // Started new plot
@@ -49,7 +47,7 @@ class LogController extends Controller
     }
     
     public function index() {
-        $logLines = LogLine::all();
+        $logLines = LogLine::latest()->take(100)->get();
 
         return view('logs.index', compact('logLines'));
     }

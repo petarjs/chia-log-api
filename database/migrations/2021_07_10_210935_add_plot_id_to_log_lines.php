@@ -14,7 +14,7 @@ class AddPlotIdToLogLines extends Migration
     public function up()
     {
         Schema::table('log_lines', function (Blueprint $table) {
-            $table->unsignedBigInteger('plot_id');
+            $table->unsignedBigInteger('plot_id')->nullable();
         });
     }
 
