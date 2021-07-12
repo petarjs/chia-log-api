@@ -47,7 +47,7 @@ class LogController extends Controller
     }
     
     public function index() {
-        $logLines = LogLine::orderBy('created_at', 'asc')->take(100)->get();
+        $logLines = LogLine::latest()->take(100)->orderBy('created_at', 'asc')->get();
 
         return view('logs.index', compact('logLines'));
     }
