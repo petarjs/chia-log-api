@@ -14,7 +14,7 @@
 
                 <div
                     class="p-6 bg-black border-b border-gray-200 font-mono text-green-600"
-                    style="max-height: 580px; overflow: scroll; white-space: break-spaces;">
+                    style="white-space: break-spaces;">
 {{$data->df}}
                 </div>
             </div>
