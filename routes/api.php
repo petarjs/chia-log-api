@@ -16,4 +16,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth.apikey')->post('/log', [LogController::class, 'store']);
-Route::middleware('auth.apikey')->post('/status', [StatusController::class, 'store']);
+Route::post('/status', [StatusController::class, 'store']);
