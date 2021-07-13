@@ -23,17 +23,17 @@ class StatusController extends Controller
     }
 
     public function disks($machine = 'chia-1') {
-        $data = Status::where('machine', $machine)->orderBy('created_at', 'desc')->take(1);
+        $data = Status::where('machine', $machine)->orderBy('created_at', 'desc')->first();
         return view('status.disks', compact('data'));
     }
 
     public function sensors($machine = 'chia-1') {
-        $data = Status::where('machine', $machine)->orderBy('created_at', 'desc')->take(1);
+        $data = Status::where('machine', $machine)->orderBy('created_at', 'desc')->first();
         return view('status.sensors', compact('data'));
     }
     
     public function farm($machine = 'chia-1') {
-        $data = Status::where('machine', $machine)->orderBy('created_at', 'desc')->take(1);
+        $data = Status::where('machine', $machine)->orderBy('created_at', 'desc')->first();
         return view('status.farm', compact('data'));
     }
 }
