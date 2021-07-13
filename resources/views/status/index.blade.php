@@ -8,7 +8,7 @@
     <div class="pb-12 pt-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @foreach($machines as $machine)
-            <div class="mb-6">
+            <div class="mb-12">
                 <h2 class="text-4xl font-bold">{{$machine}}</h2>
                 <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
                     <a href="/status/{{$machine}}/disks">
@@ -33,7 +33,7 @@
                         </div>
                     </a>
                     
-                    <a href="/status/{{$machine}}/sensors">
+                    <a href="/status/{{$machine}}/farm">
                         <div class="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
                             <dd class="text-3xl font-semibold text-gray-900">
                                 Farm
