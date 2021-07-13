@@ -11,7 +11,7 @@ class StatusController extends Controller
     public function store(StatusRequest $request) {
         $data = $request->all();
         $key = $request->header('X-Authorization');
-        $apiKey = ApiKey::where('key', $key)->get();
+        $apiKey = ApiKey::where('key', $key)->first();
 
         if (!$apiKey) {
             abort(401);
