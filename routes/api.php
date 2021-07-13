@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\LogController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\StatusController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth.apikey')->post('/log', [LogController::class, 'store']);
+Route::middleware('auth.apikey')->post('/status', [StatusController::class, 'store']);
