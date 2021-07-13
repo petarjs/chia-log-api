@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\PlotController;
+use App\Http\Controllers\StatusController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +26,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/logs', [LogController::class, 'index'])->name('logs');
     Route::get('/plots', [PlotController::class, 'index'])->name('plots');
     Route::get('/plots/{id}', [PlotController::class, 'details'])->name('plotDetails');
+    Route::get('/status/{machine}/disks', [StatusController::class, 'disks'])->name('disks');
+    Route::get('/status/{machine}/farm', [StatusController::class, 'farm'])->name('farm');
+    Route::get('/status/{machine}/sensors', [StatusController::class, 'sensors'])->name('sensors');
 });
 
 require __DIR__.'/auth.php';
