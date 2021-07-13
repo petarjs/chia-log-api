@@ -72,16 +72,32 @@ class LogController extends Controller
         $avgTime = collect($totalTimes)->average();
 
         $plotCounts = LogLine::where('line', 'like', '%Total plot creation time was%')
-                            ->groupBy('date')
-                            ->orderBy('date', 'DESC')
-                            ->get([
-                                DB::raw('Date(created_at) as date'),
-                                DB::raw('COUNT(*) as "num_plots"')
-                            ]);
+            ->groupBy('date')
+            ->orderBy('date', 'DESC')
+            ->get([
+                DB::raw('Date(created_at) as date'),
+                DB::raw('COUNT(*) as "numPlots"')
+            ]);
+
+        foreach ($plotCounts as $plotCount) {
+            $date = $plotCount['date'];
+            $plotsDate = LogLine::where(DB::raw('Date(created_at)'), $date)
+                ->where('line', 'LIKE', '%Total plot creation time was%')
+                ->get();
+            $totalTimesDate = $plotsDate->map(function($line) {
+                if (preg_match('/Total plot creation time was (.*) sec/m', $line, $match)) {
+                    $time = $match[1];
+                    return floatval($time);
+                }
+            });
+            $avgTimeDate = collect($totalTimesDate)->average();
+            $plotCount['avgTotalTime'] = number_format($avgTimeDate, 0);
+            $plotCount['avgTotalTimeMin'] = number_format($avgTimeDate / 60, 2);
+        }
 
         return view('dashboard', [
-            'avgTotalTime' => $avgTime,
-            'avgTotalTimeMin' => $avgTime / 60,
+            'avgTotalTime' => number_format($avgTime, 0),
+            'avgTotalTimeMin' => number_format($avgTime / 60, 2),
             'plotCounts' => $plotCounts,
         ]);
     }
