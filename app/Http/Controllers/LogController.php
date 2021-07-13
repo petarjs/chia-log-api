@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LogRequest;
 use App\Models\LogLine;
 use App\Models\Plot;
+use App\Models\User;
+use App\Notifications\DiskOutOfSpace;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -12,6 +14,13 @@ class LogController extends Controller
 {
     public function store(LogRequest $request) {
         $log = LogLine::create($request->all());
+
+        if (str_contains($log->line, 'fwrite() failed')) {
+            $users = User::all();
+            foreach($users as $user) {
+                $user->notify(new DiskOutOfSpace());
+            }
+        }
 
         if (str_contains($log->line, 'Plot Name:')) {
             // Started new plot
