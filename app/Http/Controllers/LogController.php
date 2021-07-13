@@ -93,6 +93,33 @@ class LogController extends Controller
             $avgTimeDate = collect($totalTimesDate)->average();
             $plotCount['avgTotalTime'] = number_format($avgTimeDate, 0);
             $plotCount['avgTotalTimeMin'] = number_format($avgTimeDate / 60, 2);
+
+            $plotsDateCopy = LogLine::where(DB::raw('Date(created_at)'), $date)
+                ->where('line', 'LIKE', '%Copy to%.plot finished%')
+                ->get();
+            $copyTimesDate = $plotsDateCopy->map(function($plot) {
+                $line = $plot->line;
+                if (preg_match('/plot finished, took (.*) sec, (.*) MB\/s avg/m', $line, $match)) {
+                    $time = $match[1];
+                    $speed = $match[2];
+                    return [
+                        'time' => floatval($time),
+                        'speed' => floatval($speed),
+                    ];
+                }
+            });
+            $plotCount['avgCopyTime'] = number_format(
+                collect($copyTimesDate)->average(function($copyInfo) {
+                    return $copyInfo['time'];
+                }),
+                2,
+            );
+            $plotCount['avgCopySpeed'] = number_format(
+                collect($copyTimesDate)->average(function($copyInfo) {
+                    return $copyInfo['speed'];
+                }),
+                2,
+            );
         }
 
         return view('dashboard', [

@@ -41,6 +41,9 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Avg. plot time
                             </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Avg. copy time and speed
+                            </th>
                         </thead>
                         <tbody>
                             @foreach($plotCounts as $i => $plotCount)
@@ -53,6 +56,9 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         {{$plotCount->avgTotalTimeMin}} min ({{$plotCount->avgTotalTime}}s)
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        {{$plotCount->avgCopyTime}}s ({{$plotCount->avgCopySpeed}} MB/s)
                                     </td>
                                 </tr>
                             @endforeach
