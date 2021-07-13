@@ -36,4 +36,9 @@ class StatusController extends Controller
         $data = Status::where('machine', $machine)->orderBy('created_at', 'desc')->first();
         return view('status.farm', compact('data'));
     }
+    
+    public function index() {
+        $machines = ApiKey::all()->pluck('name');
+        return view('status.index', compact('machines'));
+    }
 }
