@@ -24,7 +24,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('system-summary')->hourly();
+        \Log::debug('Executing system summary');
+        $schedule->command('system-summary')->everyMinute();
     }
 
     /**
