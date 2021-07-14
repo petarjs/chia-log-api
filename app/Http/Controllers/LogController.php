@@ -128,6 +128,7 @@ class LogController extends Controller
         $farm = $status->farm;
         $walletInfo = $status->wallet;
         preg_match('/Plot count for all harvesters: (.*)\n/', $farm, $matches);
+        dd($matches);
         $plotCount = $matches[1];
         preg_match('/of size: (.*) TiB/', $farm, $matches);
         $plotSize = $matches[1];
