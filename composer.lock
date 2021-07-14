@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c36e60bb768a0a6fd4e2c246b58f4c07",
+    "content-hash": "a31ef24f31d5ed48dcb581999d03d10c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1401,6 +1401,57 @@
                 }
             ],
             "time": "2021-01-18T20:58:21+00:00"
+        },
+        {
+            "name": "mashape/unirest-php",
+            "version": "v3.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Mashape/unirest-php.git",
+                "reference": "842c0f242dfaaf85f16b72e217bf7f7c19ab12cb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Mashape/unirest-php/zipball/842c0f242dfaaf85f16b72e217bf7f7c19ab12cb",
+                "reference": "842c0f242dfaaf85f16b72e217bf7f7c19ab12cb",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "codeclimate/php-test-reporter": "0.1.*",
+                "phpunit/phpunit": "~4.4"
+            },
+            "suggest": {
+                "ext-json": "Allows using JSON Bodies for sending and parsing requests"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Unirest\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Unirest PHP",
+            "homepage": "https://github.com/Mashape/unirest-php",
+            "keywords": [
+                "client",
+                "curl",
+                "http",
+                "https",
+                "rest"
+            ],
+            "support": {
+                "email": "opensource@mashape.com",
+                "issues": "https://github.com/Mashape/unirest-php/issues",
+                "source": "https://github.com/Mashape/unirest-php/tree/master"
+            },
+            "time": "2016-08-11T17:49:21+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -4861,6 +4912,56 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/2.2.3"
             },
             "time": "2020-07-13T06:12:54+00:00"
+        },
+        {
+            "name": "vittominacori/coinmarketcap-php",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vittominacori/coinmarketcap-php.git",
+                "reference": "d15ebaa0decbc076003a0da7d1d687b975df7408"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vittominacori/coinmarketcap-php/zipball/d15ebaa0decbc076003a0da7d1d687b975df7408",
+                "reference": "d15ebaa0decbc076003a0da7d1d687b975df7408",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "mashape/unirest-php": "^3.0",
+                "php": ">=7.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CoinMarketCap\\": "src/lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vittorio Minacori",
+                    "homepage": "https://github.com/vittominacori"
+                }
+            ],
+            "description": "A PHP wrapper for CoinMarketCap API",
+            "homepage": "https://github.com/vittominacori/coinmarketcap-php",
+            "keywords": [
+                "client",
+                "coinmarketcap",
+                "crypto",
+                "exchange"
+            ],
+            "support": {
+                "issues": "https://github.com/vittominacori/coinmarketcap-php/issues",
+                "source": "https://github.com/vittominacori/coinmarketcap-php"
+            },
+            "time": "2019-12-08T16:57:24+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

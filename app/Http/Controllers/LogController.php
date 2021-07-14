@@ -9,6 +9,7 @@ use App\Models\Status;
 use App\Models\User;
 use App\Notifications\DiskOutOfSpace;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class LogController extends Controller
@@ -123,14 +124,27 @@ class LogController extends Controller
             );
         }
 
-        $farm = Status::latest()->first()->farm;
+        $status = Status::latest()->first();
+        $farm = $status->farm;
+        $walletInfo = $status->wallet;
         preg_match('/Plot count for all harvesters: (.*)\n/', $farm, $matches);
         $plotCount = $matches[1];
         preg_match('/of size: (.*) TiB/', $farm, $matches);
         $plotSize = $matches[1];
 
+        preg_match('/^\s*-Total Balance: (.*) xch/', $walletInfo, $matches);
+        $walletBalance = $matches[1];
+
         $chia1SensorsText = Status::latest()->where('machine', 'chia-1')->first()->sensors;
         $chia1Sensors = $this->parseSensors($chia1SensorsText);
+
+        
+        $xchPrice = Cache::remember('xchPrice', 1 * 60 * 60, function() {
+            $cmc = new \CoinMarketCap\Api('7d313990-4234-4964-8dfa-94c04b15ebcd');
+            $response = $cmc->cryptocurrency()->quotesLatest(['symbol' => 'XCH', 'convert' => 'USD']);
+            $chiaPrice = $response->data->XCH->quote->USD->price;
+            return $chiaPrice;
+        });
 
         return view('dashboard', [
             'avgTotalTime' => number_format($avgTime, 0),
@@ -138,6 +152,9 @@ class LogController extends Controller
             'plotCounts' => $plotCounts,
             'plotCount' => $plotCount,
             'plotSize' => number_format($plotSize, 2),
+            'walletBalance' => number_format($walletBalance, 5),
+            'walletBalanceUsd' => number_format($walletBalance * $xchPrice, 2),
+            'xchPrice' => number_format($xchPrice, 2),
             'chia1Sensors' => $chia1Sensors,
         ]);
     }
