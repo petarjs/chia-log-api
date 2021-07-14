@@ -133,7 +133,11 @@ class LogController extends Controller
         $plotSize = $matches[1];
 
         preg_match('/^\s*-Total Balance: (.*) xch/', $walletInfo, $matches);
-        $walletBalance = $matches[1];
+        try {
+            $walletBalance = $matches[1];
+        } catch (\Throwable $th) {
+            $walletBalance = 0;
+        }
 
         $chia1SensorsText = Status::latest()->where('machine', 'chia-1')->first()->sensors;
         $chia1Sensors = $this->parseSensors($chia1SensorsText);
