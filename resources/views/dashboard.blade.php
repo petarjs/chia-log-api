@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="mb-6">
                 <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-4">
-                    <div class="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
+                    <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-yellow-400">
                         <dt class="text-sm font-medium text-gray-500 truncate">
                             Avg. plot creation time (s)
                         </dt>
@@ -18,7 +18,7 @@
                         </dd>
                     </div>
 
-                    <div class="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
+                    <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-yellow-400">
                         <dt class="text-sm font-medium text-gray-500 truncate">
                             Avg. plot creation time (min)
                         </dt>
@@ -27,7 +27,7 @@
                         </dd>
                     </div>
 
-                    <div class="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
+                    <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-indigo-600">
                         <dt class="text-sm font-medium text-gray-500 truncate">
                             Plot count
                         </dt>
@@ -36,7 +36,7 @@
                         </dd>
                     </div>
 
-                    <div class="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
+                    <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-indigo-600">
                         <dt class="text-sm font-medium text-gray-500 truncate">
                             Plot size
                         </dt>
@@ -45,7 +45,7 @@
                         </dd>
                     </div>
 
-                    <div class="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
+                    <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-green-400">
                         <dt class="text-sm font-medium text-gray-500 truncate">
                             Wallet Balance
                         </dt>
@@ -54,7 +54,7 @@
                         </dd>
                     </div>
                     
-                    <div class="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
+                    <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-green-400">
                         <dt class="text-sm font-medium text-gray-500 truncate">
                             XCH price
                         </dt>
@@ -63,7 +63,7 @@
                         </dd>
                     </div>
 
-                    <div class="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
+                    <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-pink-400">
                         <dt class="text-sm font-medium text-gray-500 truncate">
                         <span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">chia-1</span>
                             CPU Temp Now
@@ -73,7 +73,7 @@
                         </dd>
                     </div>
 
-                    <div class="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
+                    <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-pink-400">
                         <dt class="text-sm font-medium text-gray-500 truncate">
                             <span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">chia-1</span>
                             NVME Temp Now

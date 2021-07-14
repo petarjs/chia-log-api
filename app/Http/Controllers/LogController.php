@@ -132,7 +132,7 @@ class LogController extends Controller
         preg_match('/of size: (.*) TiB/', $farm, $matches);
         $plotSize = $matches[1];
 
-        preg_match('/^\s*-Total Balance: (.*) xch/', $walletInfo, $matches);
+        preg_match('/-Total Balance: (.*) xch/', $walletInfo, $matches);
         try {
             $walletBalance = $matches[1];
         } catch (\Throwable $th) {
@@ -142,7 +142,6 @@ class LogController extends Controller
         $chia1SensorsText = Status::latest()->where('machine', 'chia-1')->first()->sensors;
         $chia1Sensors = $this->parseSensors($chia1SensorsText);
 
-        
         $xchPrice = Cache::remember('xchPrice', 1 * 60 * 60, function() {
             $cmc = new \CoinMarketCap\Api('7d313990-4234-4964-8dfa-94c04b15ebcd');
             $response = $cmc->cryptocurrency()->quotesLatest(['symbol' => 'XCH', 'convert' => 'USD']);
@@ -156,7 +155,7 @@ class LogController extends Controller
             'plotCounts' => $plotCounts,
             'plotCount' => $plotCount,
             'plotSize' => number_format($plotSize, 2),
-            'walletBalance' => number_format($walletBalance, 5),
+            'walletBalance' => number_format($walletBalance, 2),
             'walletBalanceUsd' => number_format($walletBalance * $xchPrice, 2),
             'xchPrice' => number_format($xchPrice, 2),
             'chia1Sensors' => $chia1Sensors,
