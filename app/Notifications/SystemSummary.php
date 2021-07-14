@@ -54,6 +54,7 @@ class SystemSummary extends Notification
     {
         return TelegramMessage::create()
             ->content(trim("
+---------------------------------------
 # Chia Price
 XCH: \${$this->data['xchPrice']}
 
