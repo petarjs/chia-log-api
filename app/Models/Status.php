@@ -13,6 +13,7 @@ class Status extends Model
         'df',
         'sensors',
         'farm',
+        'wallet',
         'machine',
     ];
 }
