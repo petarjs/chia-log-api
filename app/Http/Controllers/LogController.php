@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LogRequest;
 use App\Models\LogLine;
 use App\Models\Plot;
+use App\Models\Status;
 use App\Models\User;
 use App\Notifications\DiskOutOfSpace;
 use Illuminate\Http\Request;
@@ -122,10 +123,30 @@ class LogController extends Controller
             );
         }
 
+        $farm = Status::latest()->first()->farm;
+        preg_match('/Plot count for all harvesters: (.*)\n/', $farm, $matches);
+        $plotCount = $matches[1];
+        preg_match('/of size: (.*) TiB/', $farm, $matches);
+        $plotSize = $matches[1];
+
+        $chia1SensorsText = Status::latest()->where('machine', 'chia-1')->first()->sensors;
+        $chia1Sensors = $this->parseSensors($chia1SensorsText);
+
         return view('dashboard', [
             'avgTotalTime' => number_format($avgTime, 0),
             'avgTotalTimeMin' => number_format($avgTime / 60, 2),
             'plotCounts' => $plotCounts,
+            'plotCount' => $plotCount,
+            'plotSize' => number_format($plotSize, 2),
+            'chia1Sensors' => $chia1Sensors,
         ]);
+    }
+
+    private function parseSensors($sensors) {
+        preg_match('/radeon-pci-(.*)\nAdapter: PCI adapter\ntemp1:\s+(.*)°C\s/', $sensors, $matches);
+        $cpu = $matches[2];
+        preg_match('/nvme-pci-(.*)\nAdapter: PCI adapter\nComposite:\s+(.*)°C\s/', $sensors, $matches);
+        $nvme = $matches[2];
+        return compact('cpu', 'nvme');
     }
 }

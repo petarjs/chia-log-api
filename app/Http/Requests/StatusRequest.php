@@ -27,6 +27,7 @@ class StatusRequest extends FormRequest
             'df' => 'required',
             'sensors' => 'required',
             'farm' => 'required',
+            'wallet' => 'required',
         ];
     }
 }
