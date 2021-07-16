@@ -26,6 +26,24 @@
                             {{$avgTotalTimeMin}} min
                         </dd>
                     </div>
+                    
+                    <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-yellow-400">
+                        <dt class="text-sm font-medium text-gray-500 truncate">
+                            Min. plot creation time (min)
+                        </dt>
+                        <dd class="mt-1 text-3xl font-semibold text-gray-900">
+                            {{$minTotalTimeMin}} min
+                        </dd>
+                    </div>
+                    
+                    <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-yellow-400">
+                        <dt class="text-sm font-medium text-gray-500 truncate">
+                            Max. plot creation time (min)
+                        </dt>
+                        <dd class="mt-1 text-3xl font-semibold text-gray-900">
+                            {{$maxTotalTimeMin}} min
+                        </dd>
+                    </div>
 
                     <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-indigo-600">
                         <dt class="text-sm font-medium text-gray-500 truncate">

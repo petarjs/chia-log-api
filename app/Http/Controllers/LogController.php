@@ -72,6 +72,8 @@ class LogController extends Controller
             }
         });
         $avgTime = collect($totalTimes)->average();
+        $minTime = collect($totalTimes)->min();
+        $maxTime = collect($totalTimes)->max();
 
         $plotCounts = LogLine::where('line', 'like', '%Total plot creation time was%')
             ->groupBy('date')
@@ -152,6 +154,8 @@ class LogController extends Controller
         return view('dashboard', [
             'avgTotalTime' => number_format($avgTime, 0),
             'avgTotalTimeMin' => number_format($avgTime / 60, 2),
+            'minTotalTimeMin' => number_format($minTime / 60, 2),
+            'maxTotalTimeMin' => number_format($maxTime / 60, 2),
             'plotCounts' => $plotCounts,
             'plotCount' => $plotCount,
             'plotSize' => number_format($plotSize, 2),
