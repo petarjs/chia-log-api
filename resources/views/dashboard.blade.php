@@ -11,7 +11,7 @@
                 <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-4">
                     <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-yellow-400">
                         <dt class="text-sm font-medium text-gray-500 truncate">
-                            Avg. plot creation time (s)
+                            Avg. plot creation time
                         </dt>
                         <dd class="mt-1 text-3xl font-semibold text-gray-900">
                             {{$avgTotalTime}}s
@@ -20,7 +20,7 @@
 
                     <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-yellow-400">
                         <dt class="text-sm font-medium text-gray-500 truncate">
-                            Avg. plot creation time (min)
+                            Avg. plot creation time
                         </dt>
                         <dd class="mt-1 text-3xl font-semibold text-gray-900">
                             {{$avgTotalTimeMin}} min
@@ -29,7 +29,7 @@
                     
                     <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-yellow-400">
                         <dt class="text-sm font-medium text-gray-500 truncate">
-                            Min. plot creation time (min)
+                            Min. plot creation time
                         </dt>
                         <dd class="mt-1 text-3xl font-semibold text-gray-900">
                             {{$minTotalTimeMin}} min
@@ -38,7 +38,7 @@
                     
                     <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-yellow-400">
                         <dt class="text-sm font-medium text-gray-500 truncate">
-                            Max. plot creation time (min)
+                            Max. plot creation time
                         </dt>
                         <dd class="mt-1 text-3xl font-semibold text-gray-900">
                             {{$maxTotalTimeMin}} min
