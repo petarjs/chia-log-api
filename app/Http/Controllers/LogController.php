@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LogRequest;
+use App\Models\ApiKey;
 use App\Models\LogLine;
 use App\Models\Plot;
 use App\Models\Status;
@@ -15,7 +16,17 @@ use Illuminate\Support\Facades\DB;
 class LogController extends Controller
 {
     public function store(LogRequest $request) {
-        $log = LogLine::create($request->all());
+        $data = $request->all();
+        $key = $request->header('X-Authorization');
+        $apiKey = ApiKey::where('key', $key)->first();
+
+        if (!$apiKey) {
+            abort(401);
+        }
+
+        $machine = $apiKey->name;
+        $data['machine'] = $machine;
+        $log = LogLine::create($data);
 
         if (str_contains($log->line, 'fwrite() failed')) {
             $users = User::all();

@@ -9,7 +9,7 @@ class LogLine extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['line'];
+    protected $fillable = ['line', 'machine'];
 
     public function plot() {
         return $this->belongsTo(Plot::class);
