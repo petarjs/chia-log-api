@@ -160,7 +160,7 @@ class LogController extends Controller
             $walletBalance = 0;
         }
 
-        $chia1SensorsText = Status::where('machine', $machine)->latest()->where('machine', 'chia-1')->first()->sensors;
+        $chia1SensorsText = Status::where('machine', $machine)->latest()->first()->sensors;
         $chia1Sensors = $this->parseSensors($chia1SensorsText);
 
         $xchPrice = Cache::remember('xchPrice', 1 * 60 * 60, function() {
