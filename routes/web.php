@@ -21,7 +21,7 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [LogController::class, 'dash'])->name('dashboard');
+    Route::get('/dashboard/{machine}', [LogController::class, 'dash'])->name('dashboard');
     
     Route::get('/logs', [LogController::class, 'index'])->name('logs');
     Route::get('/plots', [PlotController::class, 'index'])->name('plots');

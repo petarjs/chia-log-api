@@ -74,8 +74,12 @@ class LogController extends Controller
         return view('logs.index', compact('logLines'));
     }
 
-    public function dash() {
-        $plots = LogLine::where('line', 'LIKE', '%Total plot creation time was%')->get();
+    public function dash($machine) {
+        if (!$machine) {
+            $machine = 'chia-1';
+        }
+
+        $plots = LogLine::where('machine', $machine)->where('line', 'LIKE', '%Total plot creation time was%')->get();
         $totalTimes = $plots->map(function($line) {
             if (preg_match('/Total plot creation time was (.*) sec/m', $line, $match)) {
                 $time = $match[1];
@@ -86,7 +90,7 @@ class LogController extends Controller
         $minTime = collect($totalTimes)->min();
         $maxTime = collect($totalTimes)->max();
 
-        $plotCounts = LogLine::where('line', 'like', '%Total plot creation time was%')
+        $plotCounts = LogLine::where('machine', $machine)->where('line', 'like', '%Total plot creation time was%')
             ->groupBy('date')
             ->orderBy('date', 'DESC')
             ->get([
@@ -96,7 +100,7 @@ class LogController extends Controller
 
         foreach ($plotCounts as $plotCount) {
             $date = $plotCount['date'];
-            $plotsDate = LogLine::where(DB::raw('Date(created_at)'), $date)
+            $plotsDate = LogLine::where('machine', $machine)->where(DB::raw('Date(created_at)'), $date)
                 ->where('line', 'LIKE', '%Total plot creation time was%')
                 ->get();
             $totalTimesDate = $plotsDate->map(function($line) {
@@ -109,7 +113,7 @@ class LogController extends Controller
             $plotCount['avgTotalTime'] = number_format($avgTimeDate, 0);
             $plotCount['avgTotalTimeMin'] = number_format($avgTimeDate / 60, 2);
 
-            $plotsDateCopy = LogLine::where(DB::raw('Date(created_at)'), $date)
+            $plotsDateCopy = LogLine::where('machine', $machine)->where(DB::raw('Date(created_at)'), $date)
                 ->where('line', 'LIKE', '%Copy to%.plot finished%')
                 ->get();
             $copyTimesDate = $plotsDateCopy->map(function($plot) {
@@ -137,7 +141,7 @@ class LogController extends Controller
             );
         }
 
-        $status = Status::latest()->first();
+        $status = Status::where('machine', $machine)->latest()->first();
         $farm = $status->farm;
         $walletInfo = $status->wallet;
         preg_match('/Plot count for all harvesters: (.*)\n/', $farm, $matches);
@@ -156,7 +160,7 @@ class LogController extends Controller
             $walletBalance = 0;
         }
 
-        $chia1SensorsText = Status::latest()->where('machine', 'chia-1')->first()->sensors;
+        $chia1SensorsText = Status::where('machine', $machine)->latest()->where('machine', 'chia-1')->first()->sensors;
         $chia1Sensors = $this->parseSensors($chia1SensorsText);
 
         $xchPrice = Cache::remember('xchPrice', 1 * 60 * 60, function() {
@@ -167,6 +171,7 @@ class LogController extends Controller
         });
 
         return view('dashboard', [
+            'machine' => $machine,
             'avgTotalTime' => number_format($avgTime, 0),
             'avgTotalTimeMin' => number_format($avgTime / 60, 2),
             'minTotalTimeMin' => number_format($minTime / 60, 2),
