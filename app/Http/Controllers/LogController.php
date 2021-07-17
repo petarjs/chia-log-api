@@ -74,7 +74,7 @@ class LogController extends Controller
         return view('logs.index', compact('logLines'));
     }
 
-    public function dash($machine) {
+    public function dash($machine = 'chia-1') {
         if (!$machine) {
             $machine = 'chia-1';
         }
