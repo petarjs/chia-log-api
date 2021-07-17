@@ -143,7 +143,11 @@ class LogController extends Controller
         preg_match('/Plot count for all harvesters: (.*)\n/', $farm, $matches);
         $plotCount = $matches[1];
         preg_match('/of size: (.*) TiB/', $farm, $matches);
-        $plotSize = $matches[1];
+        try {
+            $plotSize = $matches[1];
+        } catch (\Throwable $th) {
+            $plotSize = 0;
+        }
 
         preg_match('/-Total Balance: (.*) xch/', $walletInfo, $matches);
         try {
