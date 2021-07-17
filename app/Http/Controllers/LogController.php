@@ -196,7 +196,7 @@ class LogController extends Controller
             return compact('cpu', 'nvme');
         } catch (\Throwable $th) {
             // chia 2
-            preg_match('/Adapter: nvkm-0000:04:00.0-bus-0002(.*)temp1:\s+(.*)°C(.*)Board Temp\s/', $sensors, $matches);
+            preg_match('/Adapter: nvkm-0000:04:00\.0-bus-0002(.*)temp1:\s+(.*)°C\s+\((.*)Board Temp/s', $sensors, $matches);
             $cpu = $matches[2];
             preg_match('/nvme-pci-(.*)\nAdapter: PCI adapter\nComposite:\s+(.*)°C\s/', $sensors, $matches);
             $nvme = $matches[2];
