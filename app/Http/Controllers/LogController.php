@@ -187,10 +187,20 @@ class LogController extends Controller
     }
 
     private function parseSensors($sensors) {
-        preg_match('/radeon-pci-(.*)\nAdapter: PCI adapter\ntemp1:\s+(.*)°C\s/', $sensors, $matches);
-        $cpu = $matches[2];
-        preg_match('/nvme-pci-(.*)\nAdapter: PCI adapter\nComposite:\s+(.*)°C\s/', $sensors, $matches);
-        $nvme = $matches[2];
-        return compact('cpu', 'nvme');
+        try {
+            // chia 1
+            preg_match('/radeon-pci-(.*)\nAdapter: PCI adapter\ntemp1:\s+(.*)°C\s/', $sensors, $matches);
+            $cpu = $matches[2];
+            preg_match('/nvme-pci-(.*)\nAdapter: PCI adapter\nComposite:\s+(.*)°C\s/', $sensors, $matches);
+            $nvme = $matches[2];
+            return compact('cpu', 'nvme');
+        } catch (\Throwable $th) {
+            // chia 2
+            preg_match('/Adapter: nvkm-0000:04:00.0-bus-0002(.*)temp1:\s+(.*)°C(.*)Board Temp\s/', $sensors, $matches);
+            $cpu = $matches[2];
+            preg_match('/nvme-pci-(.*)\nAdapter: PCI adapter\nComposite:\s+(.*)°C\s/', $sensors, $matches);
+            $nvme = $matches[2];
+            return compact('cpu', 'nvme');
+        }
     }
 }
