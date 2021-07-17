@@ -3,6 +3,8 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Dashboard') }}
         </h2>
+        <a href="{{ route('dashboard', 'chia-1') }}">chia-1</a>
+        <a href="{{ route('dashboard', 'chia-2') }}">chia-2</a>
     </x-slot>
 
     <div class="pb-12 pt-8">
@@ -84,7 +86,7 @@
                     <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-pink-400">
                         <dt class="text-sm font-medium text-gray-500 truncate">
                             CPU Temp Now
-                            <span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">chia-1</span>
+                            <span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">{{$machine}}</span>
                         </dt>
                         <dd class="mt-1 text-3xl font-semibold text-gray-900">
                             {{$chia1Sensors['cpu']}}°C
@@ -94,7 +96,7 @@
                     <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-pink-400">
                         <dt class="text-sm font-medium text-gray-500 truncate">
                             NVME Temp Now
-                            <span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">chia-1</span>
+                            <span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">{{$machine}}</span>
                         </dt>
                         <dd class="mt-1 text-3xl font-semibold text-gray-900">
                             {{$chia1Sensors['nvme']}}°C
