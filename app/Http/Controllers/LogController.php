@@ -68,10 +68,10 @@ class LogController extends Controller
         $log->save();
     }
     
-    public function index() {
-        $logLines = LogLine::latest()->take(100)->get()->reverse();
+    public function index($machine = 'chia-1') {
+        $logLines = LogLine::where('machine', $machine)->latest()->take(100)->get()->reverse();
 
-        return view('logs.index', compact('logLines'));
+        return view('logs.index', compact('logLines', 'machine'));
     }
 
     public function dash($machine = 'chia-1') {

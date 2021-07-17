@@ -1,8 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Logs') }}
+            {{ __('Logs') }} {{$machine}}
         </h2>
+        <a href="{{ route('logs', 'chia-1') }}">chia-1</a>
+        <a href="{{ route('logs', 'chia-2') }}">chia-2</a>
     </x-slot>
 
     <div class="py-12">
