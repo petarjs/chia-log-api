@@ -185,6 +185,8 @@ class LogController extends Controller
             ];
         }
 
+        dd([$diskInfo, $disk]);
+
         return view('dashboard', [
             'machine' => $machine,
             'avgTotalTime' => number_format($avgTime, 0),
