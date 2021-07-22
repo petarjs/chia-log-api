@@ -179,6 +179,7 @@ class LogController extends Controller
             $name = $matches[5][$matchCount - 1] . $matches[6][$matchCount - 1];
             $disk = compact('size', 'filled', 'name');
         } catch (\Throwable $th) {
+            dd([$th, $matches]);
             $disk = [
                 'size' => '',
                 'filled' => '',
