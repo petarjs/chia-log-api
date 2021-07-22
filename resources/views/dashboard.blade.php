@@ -110,10 +110,10 @@
                     
                     <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-blue-400">
                         <dt class="text-sm font-medium text-gray-500 truncate">
-                            Disk Usage Now ({{$disk['diskName']}})
+                            Disk Usage Now ({{$disk['name']}})
                         </dt>
                         <dd class="mt-1 text-3xl font-semibold text-gray-900">
-                            {{$disk['diskFilled']}}%
+                            {{$disk['filled']}}% (of {{$disk['size']}}TB)
                         </dd>
                     </div>
                 </dl>
