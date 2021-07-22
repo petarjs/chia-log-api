@@ -185,7 +185,7 @@ class LogController extends Controller
             ];
         }
 
-        dd([$diskInfo, $disk]);
+        dd([$diskInfo, $disk, $matches]);
 
         return view('dashboard', [
             'machine' => $machine,
