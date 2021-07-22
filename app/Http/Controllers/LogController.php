@@ -171,7 +171,7 @@ class LogController extends Controller
         });
 
         $diskInfo = $status->df;
-        preg_match('/\s(\d+)T\s+(\d+)%\s\/mnt\/(sg|wd)(.*)\s/m', $diskInfo, $matches);
+        preg_match('/\s(\d+)T\s+(\d+)%\s\/mnt\/(sg|wd)(.*)\s/', $diskInfo, $matches);
         try {
             $diskSize = $matches[1];
             $diskFilled = $matches[2];
