@@ -170,6 +170,21 @@ class LogController extends Controller
             return $chiaPrice;
         });
 
+        $diskInfo = $status->df;
+        preg_match('/\s(\d+)T\s+(\d+)%\s\/mnt\/(sg|wd)(.*)\s/m', $diskInfo, $matches);
+        try {
+            $diskSize = $matches[1];
+            $diskFilled = $matches[2];
+            $diskName = $matches[3] . $matches[4];
+            $disk = compact('diskSize', 'diskFilled', 'diskName');
+        } catch (\Throwable $th) {
+            $disk = [
+                'diskName' => '',
+                'diskSize' => '',
+                'diskFilled' => '',
+            ];
+        }
+
         return view('dashboard', [
             'machine' => $machine,
             'avgTotalTime' => number_format($avgTime, 0),
@@ -183,6 +198,7 @@ class LogController extends Controller
             'walletBalanceUsd' => number_format($walletBalance * $xchPrice, 2),
             'xchPrice' => number_format($xchPrice, 2),
             'chia1Sensors' => $chia1Sensors,
+            'disk' => $disk,
         ]);
     }
 
