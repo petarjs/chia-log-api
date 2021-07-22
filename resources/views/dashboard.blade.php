@@ -113,7 +113,7 @@
                             Disk Usage Now ({{$disk['diskName']}})
                         </dt>
                         <dd class="mt-1 text-3xl font-semibold text-gray-900">
-                            {{$disk['diskFilled']}}% (of {{$disk['diskSize']}}TB)
+                            {{$disk['diskFilled']}}%
                         </dd>
                     </div>
                 </dl>

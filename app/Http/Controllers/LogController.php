@@ -171,16 +171,14 @@ class LogController extends Controller
         });
 
         $diskInfo = $status->df;
-        preg_match('/\s(\d+)T\s+(\d+)%\s\/mnt\/(sg|wd)(.*)\s/', $diskInfo, $matches);
+        preg_match('/\s(.*+)T\s+(\d+)%\s\/mnt\/(sg|wd)(.*)\s/', $diskInfo, $matches);
         try {
-            $diskSize = $matches[1];
             $diskFilled = $matches[2];
             $diskName = $matches[3] . $matches[4];
-            $disk = compact('diskSize', 'diskFilled', 'diskName');
+            $disk = compact('diskFilled', 'diskName');
         } catch (\Throwable $th) {
             $disk = [
                 'diskName' => '',
-                'diskSize' => '',
                 'diskFilled' => '',
             ];
         }
