@@ -99,6 +99,15 @@ class LogController extends Controller
                 DB::raw('Date(created_at) as date'),
                 DB::raw('COUNT(*) as "numPlots"')
             ]);
+        $plotCountsQuery = LogLine
+            ::select(DB::raw("select statuses.farm, REPLACE(REGEXP_SUBSTR(statuses.farm, 'Plot count for all harvesters: (\\d+)'), 'Plot count for all harvesters: ', '') as num_plots"))
+            ->groupBy('date')
+            ->orderBy('date', 'DESC');
+        $plotCounts2 = $plotCountsQuery->get([
+            DB::raw('Date(created_at) as date'),
+            DB::raw('SUM(num_plots) as "numPlots"')
+        ]);
+        dd([$plotCounts2, $plotCountsQuery->toSql()]);
 
         foreach ($plotCounts as $plotCount) {
             $date = $plotCount['date'];
