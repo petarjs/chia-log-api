@@ -100,7 +100,7 @@ class LogController extends Controller
                 DB::raw('COUNT(*) as "numPlots"')
             ]);
         $plotCountsQuery = Status
-            ::select(DB::raw('Date(created_at) as date'), DB::raw("SUM(REPLACE(REGEXP_SUBSTR(statuses.farm, 'Plot count for all harvesters: (\\\\d+)'), 'Plot count for all harvesters: ', '')) as num_plots"))
+            ::select(DB::raw('Date(created_at) as date'), DB::raw("MAX(REPLACE(REGEXP_SUBSTR(statuses.farm, 'Plot count for all harvesters: (\\\\d+)'), 'Plot count for all harvesters: ', '')) as num_plots"))
             ->groupBy('date')
             ->orderBy('date', 'DESC');
         $plotCounts2 = $plotCountsQuery->get([
