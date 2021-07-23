@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\DB;
 
 class LogController extends Controller
 {
-    public function store(LogRequest $request) {
+    public function store(LogRequest $request)
+    {
         $data = $request->all();
         $key = $request->header('X-Authorization');
         $apiKey = ApiKey::where('key', $key)->first();
@@ -30,7 +31,7 @@ class LogController extends Controller
 
         if (str_contains($log->line, 'fwrite() failed')) {
             $users = User::all();
-            foreach($users as $user) {
+            foreach ($users as $user) {
                 $user->notify(new DiskOutOfSpace());
             }
         }
@@ -50,7 +51,6 @@ class LogController extends Controller
                 ]);
                 $log->plot_id = $newPlot->id;
             }
-
         } else if (str_contains($log->line, 'plot finished, took')) {
             // Plot copy finished, attach line to the previous plot
             $currentPlot = Plot::latest()->first();
@@ -67,20 +67,22 @@ class LogController extends Controller
         }
         $log->save();
     }
-    
-    public function index($machine = 'chia-1') {
+
+    public function index($machine = 'chia-1')
+    {
         $logLines = LogLine::where('machine', $machine)->latest()->take(100)->get()->reverse();
 
         return view('logs.index', compact('logLines', 'machine'));
     }
 
-    public function dash($machine = 'chia-1') {
+    public function dash($machine = 'chia-1')
+    {
         if (!$machine) {
             $machine = 'chia-1';
         }
 
         $plots = LogLine::where('machine', $machine)->where('line', 'LIKE', '%Total plot creation time was%')->get();
-        $totalTimes = $plots->map(function($line) {
+        $totalTimes = $plots->map(function ($line) {
             if (preg_match('/Total plot creation time was (.*) sec/m', $line, $match)) {
                 $time = $match[1];
                 return floatval($time);
@@ -103,7 +105,7 @@ class LogController extends Controller
             $plotsDate = LogLine::where('machine', $machine)->where(DB::raw('Date(created_at)'), $date)
                 ->where('line', 'LIKE', '%Total plot creation time was%')
                 ->get();
-            $totalTimesDate = $plotsDate->map(function($line) {
+            $totalTimesDate = $plotsDate->map(function ($line) {
                 if (preg_match('/Total plot creation time was (.*) sec/m', $line, $match)) {
                     $time = $match[1];
                     return floatval($time);
@@ -116,7 +118,7 @@ class LogController extends Controller
             $plotsDateCopy = LogLine::where('machine', $machine)->where(DB::raw('Date(created_at)'), $date)
                 ->where('line', 'LIKE', '%Copy to%.plot finished%')
                 ->get();
-            $copyTimesDate = $plotsDateCopy->map(function($plot) {
+            $copyTimesDate = $plotsDateCopy->map(function ($plot) {
                 $line = $plot->line;
                 if (preg_match('/plot finished, took (.*) sec, (.*) MB\/s avg/m', $line, $match)) {
                     $time = $match[1];
@@ -128,13 +130,13 @@ class LogController extends Controller
                 }
             });
             $plotCount['avgCopyTime'] = number_format(
-                collect($copyTimesDate)->average(function($copyInfo) {
+                collect($copyTimesDate)->average(function ($copyInfo) {
                     return $copyInfo['time'];
                 }),
                 2,
             );
             $plotCount['avgCopySpeed'] = number_format(
-                collect($copyTimesDate)->average(function($copyInfo) {
+                collect($copyTimesDate)->average(function ($copyInfo) {
                     return $copyInfo['speed'];
                 }),
                 2,
@@ -163,7 +165,7 @@ class LogController extends Controller
         $chia1SensorsText = Status::where('machine', $machine)->latest()->first()->sensors;
         $chia1Sensors = $this->parseSensors($chia1SensorsText);
 
-        $xchPrice = Cache::remember('xchPrice', 1 * 60 * 60, function() {
+        $xchPrice = Cache::remember('xchPrice', 1 * 60 * 60, function () {
             $cmc = new \CoinMarketCap\Api('7d313990-4234-4964-8dfa-94c04b15ebcd');
             $response = $cmc->cryptocurrency()->quotesLatest(['symbol' => 'XCH', 'convert' => 'USD']);
             $chiaPrice = $response->data->XCH->quote->USD->price;
@@ -171,7 +173,7 @@ class LogController extends Controller
         });
 
         $diskInfo = $status->df;
-        preg_match_all('/\/dev\/(.+)\s+(.+)T\s+(.+)T\s+(.+)\s+(\d+)%\s+\/mnt\/(sg|wd)(.+)/', $diskInfo, $matches);
+        preg_match_all('/\/dev\/(\w*)\s*([\w,]*)T\s+(.+)T\s+(.+)\s+(\d+)%\s+\/mnt\/(sg|wd)(.+)/', $diskInfo, $matches);
         try {
             $matchCount = count($matches[0]);
             $size = $matches[2][$matchCount - 1];
@@ -203,7 +205,8 @@ class LogController extends Controller
         ]);
     }
 
-    private function parseSensors($sensors) {
+    private function parseSensors($sensors)
+    {
         try {
             // chia 1
             preg_match('/radeon-pci-(.*)\nAdapter: PCI adapter\ntemp1:\s+(.*)°C\s/', $sensors, $matches);
