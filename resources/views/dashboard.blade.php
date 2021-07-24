@@ -10,6 +10,26 @@
     <div class="pb-12 pt-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="mb-6">
+                <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-4">
+                    <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-green-400">
+                        <dt class="text-sm font-medium text-gray-500 truncate">
+                            Wallet Balance
+                        </dt>
+                        <dd class="mt-1 text-3xl font-semibold text-gray-900">
+                            ${{ $walletBalanceUsd }} ({{$walletBalance}} xch)
+                        </dd>
+                    </div>
+
+                    <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-green-400">
+                        <dt class="text-sm font-medium text-gray-500 truncate">
+                            XCH price
+                        </dt>
+                        <dd class="mt-1 text-3xl font-semibold text-gray-900">
+                            ${{ $xchPrice }}
+                        </dd>
+                    </div>
+                </dl>
+
                 <h1>
                     <span class="inline-flex items-center px-3 py-0.5 rounded-full text-xl font-semibold bg-indigo-100 text-indigo-800">
                         {{$machine}}
@@ -33,7 +53,7 @@
                             {{$avgTotalTimeMin}} min
                         </dd>
                     </div>
-                    
+
                     <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-yellow-400">
                         <dt class="text-sm font-medium text-gray-500 truncate">
                             Min. plot creation time
@@ -42,7 +62,7 @@
                             {{$minTotalTimeMin}} min
                         </dd>
                     </div>
-                    
+
                     <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-yellow-400">
                         <dt class="text-sm font-medium text-gray-500 truncate">
                             Max. plot creation time
@@ -70,24 +90,6 @@
                         </dd>
                     </div>
 
-                    <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-green-400">
-                        <dt class="text-sm font-medium text-gray-500 truncate">
-                            Wallet Balance
-                        </dt>
-                        <dd class="mt-1 text-3xl font-semibold text-gray-900">
-                            ${{ $walletBalanceUsd }} ({{$walletBalance}} xch)
-                        </dd>
-                    </div>
-                    
-                    <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-green-400">
-                        <dt class="text-sm font-medium text-gray-500 truncate">
-                            XCH price
-                        </dt>
-                        <dd class="mt-1 text-3xl font-semibold text-gray-900">
-                            ${{ $xchPrice }}
-                        </dd>
-                    </div>
-
                     <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-pink-400">
                         <dt class="text-sm font-medium text-gray-500 truncate">
                             CPU Temp Now
@@ -107,7 +109,7 @@
                             {{$chia1Sensors['nvme']}}°C
                         </dd>
                     </div>
-                    
+
                     <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-blue-400">
                         <dt class="text-sm font-medium text-gray-500 truncate">
                             Disk Usage Now ({{$disk['name']}})
@@ -137,20 +139,20 @@
                         </thead>
                         <tbody>
                             @foreach($plotCounts as $i => $plotCount)
-                                <tr class="@if($i % 2 == 0) bg-white @else bg-gray-50 @endif">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        {{$plotCount->date}}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        {{$plotCount->numPlots}}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        {{$plotCount->avgTotalTimeMin}} min ({{$plotCount->avgTotalTime}}s)
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        {{$plotCount->avgCopyTime}}s ({{$plotCount->avgCopySpeed}} MB/s)
-                                    </td>
-                                </tr>
+                            <tr class="@if($i % 2 == 0) bg-white @else bg-gray-50 @endif">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{$plotCount->date}}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{$plotCount->numPlots}}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{$plotCount->avgTotalTimeMin}} min ({{$plotCount->avgTotalTime}}s)
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{$plotCount->avgCopyTime}}s ({{$plotCount->avgCopySpeed}} MB/s)
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
