@@ -104,6 +104,7 @@ class LogController extends Controller
                 DB::raw('Date(created_at) as date'),
                 DB::raw("MAX(REPLACE(REGEXP_SUBSTR(statuses.farm, 'Plot count for all harvesters: (\\\\d+)'), 'Plot count for all harvesters: ', '')) as numPlots")
             )
+            ->where('machine', $machine)
             ->groupBy('date')
             ->orderBy('date', 'DESC')
             ->get([
