@@ -92,25 +92,25 @@ class LogController extends Controller
         $minTime = collect($totalTimes)->min();
         $maxTime = collect($totalTimes)->max();
 
-        // $plotCounts = LogLine::where('machine', $machine)->where('line', 'like', '%Total plot creation time was%')
-        //     ->groupBy('date')
-        //     ->orderBy('date', 'DESC')
-        //     ->get([
-        //         DB::raw('Date(created_at) as date'),
-        //         DB::raw('COUNT(*) as "numPlots"')
-        //     ]);
-        $plotCounts = Status
-            ::select(
-                DB::raw('Date(created_at) as date'),
-                DB::raw("MAX(REPLACE(REGEXP_SUBSTR(statuses.farm, 'Plot count for all harvesters: (\\\\d+)'), 'Plot count for all harvesters: ', '')) as numPlots")
-            )
-            ->where('machine', $machine)
+        $plotCounts = LogLine::where('machine', $machine)->where('line', 'like', '%Total plot creation time was%')
             ->groupBy('date')
             ->orderBy('date', 'DESC')
             ->get([
-                DB::raw('date'),
-                DB::raw('numPlots')
+                DB::raw('Date(created_at) as date'),
+                DB::raw('COUNT(*) as "numPlots"')
             ]);
+        // $plotCounts = Status
+        //     ::select(
+        //         DB::raw('Date(created_at) as date'),
+        //         DB::raw("MAX(REPLACE(REGEXP_SUBSTR(statuses.farm, 'Plot count for all harvesters: (\\\\d+)'), 'Plot count for all harvesters: ', '')) as numPlots")
+        //     )
+        //     ->where('machine', $machine)
+        //     ->groupBy('date')
+        //     ->orderBy('date', 'DESC')
+        //     ->get([
+        //         DB::raw('date'),
+        //         DB::raw('numPlots')
+        //     ]);
 
         foreach ($plotCounts as $plotCount) {
             $date = $plotCount['date'];
