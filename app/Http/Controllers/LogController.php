@@ -156,15 +156,29 @@ class LogController extends Controller
         }
 
         $status = Status::where('machine', $machine)->latest()->first();
+        $statusC1 = Status::where('machine', 'chia-1')->latest()->first();
+        $statusC2 = Status::where('machine', 'chia-2')->latest()->first();
         $farm = $status->farm;
         $walletInfo = $status->wallet;
         preg_match('/Plot count for all harvesters: (.*)\n/', $farm, $matches);
         $plotCount = $matches[1];
+
+        preg_match('/Plot count for all harvesters: (.*)\n/', $statusC1->farm, $matches);
+        $plotCountTotal = intval($matches[1]);
+        preg_match('/Plot count for all harvesters: (.*)\n/', $statusC2->farm, $matches);
+        $plotCountTotal += intval($matches[1]);
+
         preg_match('/of size: (.*) TiB/', $farm, $matches);
         try {
             $plotSize = $matches[1];
+
+            preg_match('/of size: (.*) TiB/', $statusC1->farm, $matches);
+            $plotSizeTotal = floatval($matches[1]);
+            preg_match('/of size: (.*) TiB/', $statusC2->farm, $matches);
+            $plotSizeTotal += floatval($matches[1]);
         } catch (\Throwable $th) {
             $plotSize = 0;
+            $plotSizeTotal = 0;
         }
 
         preg_match('/-Total Balance: (.*) xch/', $walletInfo, $matches);
@@ -208,7 +222,9 @@ class LogController extends Controller
             'maxTotalTimeMin' => number_format($maxTime / 60, 2),
             'plotCounts' => $plotCounts,
             'plotCount' => $plotCount,
+            'plotCountTotal' => $plotCountTotal,
             'plotSize' => number_format($plotSize, 2),
+            'plotSizeTotal' => number_format($plotSizeTotal, 2),
             'walletBalance' => number_format($walletBalance, 2),
             'walletBalanceUsd' => number_format($walletBalance * $xchPrice, 2),
             'xchPrice' => number_format($xchPrice, 2),
