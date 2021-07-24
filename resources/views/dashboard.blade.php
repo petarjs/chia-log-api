@@ -1,10 +1,24 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-        <a href="{{ route('dashboard', 'chia-1') }}">chia-1</a>
-        <a href="{{ route('dashboard', 'chia-2') }}">chia-2</a>
+        <div class="flex justify-between">
+            <div>
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    {{ __('Dashboard') }}
+                </h2>
+                <a href="{{ route('dashboard', 'chia-1') }}">chia-1</a>
+                <a href="{{ route('dashboard', 'chia-2') }}">chia-2</a>
+            </div>
+            <div>
+                <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-indigo-400">
+                    <dt class="text-sm font-medium text-gray-500 truncate">
+                        XCH Price
+                    </dt>
+                    <dd class="mt-1 text-3xl font-semibold text-gray-900">
+                        ${{ $xchPrice }}
+                    </dd>
+                </div>
+            </div>
+        </div>
     </x-slot>
 
     <div class="pb-12 pt-8">
@@ -34,16 +48,16 @@
                             Wallet Balance
                         </dt>
                         <dd class="mt-1 text-3xl font-semibold text-gray-900">
-                            ${{ $walletBalanceUsd }} ({{$walletBalance}} xch)
+                            ${{ $walletBalanceUsd }}
                         </dd>
                     </div>
 
                     <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-green-400">
                         <dt class="text-sm font-medium text-gray-500 truncate">
-                            XCH price
+                            Wallet Balance (XCH)
                         </dt>
                         <dd class="mt-1 text-3xl font-semibold text-gray-900">
-                            ${{ $xchPrice }}
+                            {{$walletBalance}} xch
                         </dd>
                     </div>
                 </dl>
