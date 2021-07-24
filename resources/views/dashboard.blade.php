@@ -10,11 +10,8 @@
             </div>
             <div>
                 <div class="px-4 py-5 bg-white shadow-lg rounded-lg overflow-hidden sm:p-6 border-2 border-indigo-400">
-                    <dt class="text-sm font-medium text-gray-500 truncate">
-                        XCH Price
-                    </dt>
                     <dd class="mt-1 text-3xl font-semibold text-gray-900">
-                        ${{ $xchPrice }}
+                        <span class="text-gray-500">XCH</span> ${{ $xchPrice }}
                     </dd>
                 </div>
             </div>
