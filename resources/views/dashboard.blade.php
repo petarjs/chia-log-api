@@ -9,7 +9,7 @@
                 <a href="{{ route('dashboard', 'chia-2') }}">chia-2</a>
             </div>
             <div>
-                <div class="px-2 py-1 bg-white shadow-lg rounded-lg overflow-hidden border border-indigo-400">
+                <div class="px-2 py-1 bg-white shadow-lg rounded-lg overflow-hidden border border-gray-400">
                     <dd class="mt-1 text-xl font-semibold text-gray-900">
                         <span class="text-gray-500">XCH</span> ${{ $xchPrice }}
                     </dd>
