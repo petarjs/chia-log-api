@@ -9,12 +9,20 @@ use App\Models\Plot;
 use App\Models\Status;
 use App\Models\User;
 use App\Notifications\DiskOutOfSpace;
+use App\Services\DashboardService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class LogController extends Controller
 {
+    private $dashboardService;
+
+    public function __construct(DashboardService $dashboardService)
+    {
+        $this->dashboardService = $dashboardService;
+    }
+
     public function store(LogRequest $request)
     {
         $data = $request->all();
@@ -75,22 +83,20 @@ class LogController extends Controller
         return view('logs.index', compact('logLines', 'machine'));
     }
 
+    public function dashTotals()
+    {
+        $general = $this->getGeneralDashDataFormatted();
+        $c1 = $this->getAllDashDataFormatted('chia-1');
+        $c2 = $this->getAllDashDataFormatted('chia-2');
+
+        return view('dashboard-totals', compact('general', 'c1', 'c2'));
+    }
+
     public function dash($machine = 'chia-1')
     {
         if (!$machine) {
             $machine = 'chia-1';
         }
-
-        $plots = LogLine::where('machine', $machine)->where('line', 'LIKE', '%Total plot creation time was%')->get();
-        $totalTimes = $plots->map(function ($line) {
-            if (preg_match('/Total plot creation time was (.*) sec/m', $line, $match)) {
-                $time = $match[1];
-                return floatval($time);
-            }
-        });
-        $avgTime = collect($totalTimes)->average();
-        $minTime = collect($totalTimes)->min();
-        $maxTime = collect($totalTimes)->max();
 
         $plotCounts = LogLine::where('machine', $machine)->where('line', 'like', '%Total plot creation time was%')
             ->groupBy('date')
@@ -155,100 +161,90 @@ class LogController extends Controller
             );
         }
 
-        $status = Status::where('machine', $machine)->latest()->first();
-        $statusC1 = Status::where('machine', 'chia-1')->latest()->first();
-        $statusC2 = Status::where('machine', 'chia-2')->latest()->first();
-        $farm = $status->farm;
-        $walletInfo = $status->wallet;
-        preg_match('/Plot count for all harvesters: (.*)\n/', $farm, $matches);
-        $plotCount = $matches[1];
-
-        preg_match('/Plot count for all harvesters: (.*)\n/', $statusC1->farm, $matches);
-        $plotCountTotal = intval($matches[1]);
-        preg_match('/Plot count for all harvesters: (.*)\n/', $statusC2->farm, $matches);
-        $plotCountTotal += intval($matches[1]);
-
-        preg_match('/of size: (.*) TiB/', $farm, $matches);
-        try {
-            $plotSize = $matches[1];
-
-            preg_match('/of size: (.*) TiB/', $statusC1->farm, $matches);
-            $plotSizeTotal = floatval($matches[1]);
-            preg_match('/of size: (.*) TiB/', $statusC2->farm, $matches);
-            $plotSizeTotal += floatval($matches[1]);
-        } catch (\Throwable $th) {
-            $plotSize = 0;
-            $plotSizeTotal = 0;
-        }
-
-        preg_match('/-Total Balance: (.*) xch/', $walletInfo, $matches);
-        try {
-            $walletBalance = $matches[1];
-        } catch (\Throwable $th) {
-            $walletBalance = 0;
-        }
-
-        $chia1SensorsText = Status::where('machine', $machine)->latest()->first()->sensors;
-        $chia1Sensors = $this->parseSensors($chia1SensorsText);
-
-        $xchPrice = Cache::remember('xchPrice', 1 * 60 * 60, function () {
-            $cmc = new \CoinMarketCap\Api('7d313990-4234-4964-8dfa-94c04b15ebcd');
-            $response = $cmc->cryptocurrency()->quotesLatest(['symbol' => 'XCH', 'convert' => 'USD']);
-            $chiaPrice = $response->data->XCH->quote->USD->price;
-            return $chiaPrice;
-        });
-
-        $diskInfo = $status->df;
-        preg_match_all('/\/dev\/(\w*)\s*([\w,]*)T\s+(.+)T\s+(.+)\s+(\d+)%\s+\/mnt\/(sg|wd)(.+)/', $diskInfo, $matches);
-        try {
-            $matchCount = count($matches[0]);
-            $size = $matches[2][$matchCount - 1];
-            $filled = $matches[5][$matchCount - 1];
-            $name = $matches[6][$matchCount - 1] . $matches[7][$matchCount - 1];
-            $disk = compact('size', 'filled', 'name');
-        } catch (\Throwable $th) {
-            $disk = [
-                'size' => '',
-                'filled' => '',
-                'name' => '',
-            ];
-        }
-
-        return view('dashboard', [
-            'machine' => $machine,
-            'avgTotalTime' => number_format($avgTime, 0),
-            'avgTotalTimeMin' => number_format($avgTime / 60, 2),
-            'minTotalTimeMin' => number_format($minTime / 60, 2),
-            'maxTotalTimeMin' => number_format($maxTime / 60, 2),
-            'plotCounts' => $plotCounts,
-            'plotCount' => $plotCount,
-            'plotCountTotal' => $plotCountTotal,
-            'plotSize' => number_format($plotSize, 2),
-            'plotSizeTotal' => number_format($plotSizeTotal, 2),
-            'walletBalance' => number_format($walletBalance, 2),
-            'walletBalanceUsd' => number_format($walletBalance * $xchPrice, 2),
-            'xchPrice' => number_format($xchPrice, 2),
-            'chia1Sensors' => $chia1Sensors,
-            'disk' => $disk,
-        ]);
+        return view('dashboard', array_merge(
+            [
+                'machine' => $machine,
+                'plotCounts' => $plotCounts,
+            ],
+            $this->getAllDashDataFormatted($machine),
+            $this->getGeneralDashDataFormatted(),
+        ));
     }
 
-    private function parseSensors($sensors)
+    private function getGeneralDashDataFormatted()
     {
-        try {
-            // chia 1
-            preg_match('/radeon-pci-(.*)\nAdapter: PCI adapter\ntemp1:\s+(.*)°C\s/', $sensors, $matches);
-            $cpu = $matches[2];
-            preg_match('/nvme-pci-(.*)\nAdapter: PCI adapter\nComposite:\s+(.*)°C\s/', $sensors, $matches);
-            $nvme = $matches[2];
-            return compact('cpu', 'nvme');
-        } catch (\Throwable $th) {
-            // chia 2
-            preg_match('/Adapter: nvkm-0000:04:00\.0-bus-0002(.*)temp1:\s+(.*)°C\s+\((.*)Board Temp/s', $sensors, $matches);
-            $cpu = $matches[2];
-            preg_match('/nvme-pci-(.*)\nAdapter: PCI adapter\nComposite:\s+(.*)°C\s/', $sensors, $matches);
-            $nvme = $matches[2];
-            return compact('cpu', 'nvme');
-        }
+        $generalData = $this->getGeneralDashData();
+
+        return [
+            'plotCountTotal' => $generalData['plotCountTotal'],
+            'plotSizeTotal' => number_format($generalData['plotSizeTotal'], 2),
+            'walletBalance' => number_format($generalData['walletBalance'], 2),
+            'walletBalanceUsd' => number_format($generalData['walletBalance'] * $generalData['xchPrice'], 2),
+            'xchPrice' => number_format($generalData['xchPrice'], 2),
+        ];
+    }
+
+    private function getAllDashDataFormatted($machine)
+    {
+        $data = $this->getAllDashData($machine);
+
+        return [
+            'machine' => $machine,
+            'avgTotalTime' => number_format($data['avgTime'], 0),
+            'avgTotalTimeMin' => number_format($data['avgTime'] / 60, 2),
+            'minTotalTimeMin' => number_format($data['minTime'] / 60, 2),
+            'maxTotalTimeMin' => number_format($data['maxTime'] / 60, 2),
+            'plotCount' => $data['plotCount'],
+            'plotSize' => number_format($data['plotSize'], 2),
+            'chia1Sensors' => $data['chia1Sensors'],
+            'disk' => $data['disk'],
+        ];
+    }
+
+    private function getGeneralDashData()
+    {
+        $plotCountC1 = $this->dashboardService->getFarmPlotCount('chia-1');
+        $plotCountC2 = $this->dashboardService->getFarmPlotCount('chia-2');
+
+        $plotCountTotal = $plotCountC1 + $plotCountC2;
+
+        $plotSizeC1 = $this->dashboardService->getFarmPlotSize('chia-1');
+        $plotSizeC2 = $this->dashboardService->getFarmPlotSize('chia-2');
+
+        $plotSizeTotal = $plotSizeC1 + $plotSizeC2;
+
+        $walletBalance = $this->dashboardService->getWalletBalance();
+
+        $xchPrice = Cache::remember('xchPrice', 1 * 60 * 60, function () {
+            return $this->dashboardService->getChiaPrice();
+        });
+
+        return compact('plotCountTotal', 'plotSizeTotal', 'walletBalance', 'xchPrice');
+    }
+
+    private function getAllDashData($machine)
+    {
+        $times = $this->dashboardService->getPlotTimes($machine);
+        $avgTime = $times['avgTime'];
+        $minTime = $times['minTime'];
+        $maxTime = $times['maxTime'];
+
+        $plotCount = $this->dashboardService->getFarmPlotCount($machine);
+
+        $plotSize = $this->dashboardService->getFarmPlotSize($machine);
+
+        $chia1Sensors = $this->dashboardService->parseSensors($machine);
+
+        $disk = $this->dashboardService->getDiskInfo($machine);
+
+        return compact(
+            'avgTime',
+            'maxTime',
+            'minTime',
+            'plotCount',
+            'plotSize',
+            'chia1Sensors',
+            'disk',
+        );
     }
 }

@@ -21,8 +21,9 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard/{machine?}', [LogController::class, 'dash'])->name('dashboard');
-    
+    Route::get('/dashboard', [LogController::class, 'dashTotals'])->name('dashboardTotals');
+    Route::get('/dashboard/{machine}', [LogController::class, 'dash'])->name('dashboard');
+
     Route::get('/logs/{machine?}', [LogController::class, 'index'])->name('logs');
     Route::get('/plots', [PlotController::class, 'index'])->name('plots');
     Route::get('/plots/{id}', [PlotController::class, 'details'])->name('plotDetails');
@@ -32,4 +33,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/status/{machine}/sensors', [StatusController::class, 'sensors'])->name('sensors');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
