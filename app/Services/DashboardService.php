@@ -104,17 +104,28 @@ class DashboardService
             $diskInfo = $status->df;
             preg_match_all('/\/dev\/(\w*)\s*([\w,]*)T\s+(.+)T\s+(.+)\s+(\d+)%\s+\/mnt\/(sg|wd)(.+)/', $diskInfo, $matches);
             $matchCount = count($matches[0]);
-            $size = $matches[2][$matchCount - 1];
-            $filled = $matches[5][$matchCount - 1];
-            $name = $matches[6][$matchCount - 1] . $matches[7][$matchCount - 1];
-            $disk = compact('size', 'filled', 'name');
+            for ($i = 0; $i < $matchCount; $i++) {
+                $size = $matches[2][$matchCount - 1];
+                $filled = $matches[5][$matchCount - 1];
+                $name = $matches[6][$matchCount - 1] . $matches[7][$matchCount - 1];
+                $disk = compact('size', 'filled', 'name');
+                if ($filled > 0 && $filled < 100) {
+                    return $disk;
+                }
+            }
+
+            return [
+                'size' => '',
+                'filled' => '',
+                'name' => '',
+            ];
         } catch (\Throwable $th) {
             $disk = [
                 'size' => '',
                 'filled' => '',
                 'name' => '',
             ];
+            return $disk;
         }
-        return $disk;
     }
 }
