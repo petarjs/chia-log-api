@@ -58,6 +58,7 @@ class DashboardService
         $status = Status::where('machine', 'chia-1')->latest()->first();
         preg_match('/-Total Balance: (.*) xch/', $status->wallet, $matches);
         try {
+            \Log::debug([$matches[1], $status->wallet]);
             $walletBalance = $matches[1];
             return $walletBalance;
         } catch (\Throwable $th) {
