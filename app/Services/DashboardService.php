@@ -58,7 +58,6 @@ class DashboardService
         $status = Status::where('machine', 'chia-1')->latest()->first();
         preg_match('/-Total Balance: (.*) xch/', $status->wallet, $matches);
         try {
-            \Log::debug([$matches[1], $status->wallet]);
             $walletBalance = $matches[1];
             return $walletBalance;
         } catch (\Throwable $th) {
@@ -103,7 +102,7 @@ class DashboardService
         try {
             $status = Status::where('machine', $machine)->latest()->first();
             $diskInfo = $status->df;
-            preg_match_all('/\/dev\/(\w*)\s*([\w,]*)T\s+(.+)T\s+(.+)\s+(\d+)%\s+\/mnt\/(sg|wd)(.+)/', $diskInfo, $matches);
+            preg_match_all('/\/dev\/(\w*)\s*([\w,]*)T\s+(.+)T\s+(.+)\s+(\d+)%\s+\/mnt\/\d+tb\d+/', $diskInfo, $matches);
             $matchCount = count($matches[0]);
 
             for ($i = 0; $i < $matchCount; $i++) {
